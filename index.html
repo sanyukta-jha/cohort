@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cohort</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F2EF;
+  --bg2:#FFFFFF;
+  --bg3:#ECEAE6;
+  --bg4:#E4E1DC;
+  --border:#D8D4CE;
+  --border2:#C8C3BB;
+  --maroon:#6B1F2A;
+  --maroon-l:#8B2D3A;
+  --maroon-pale:#F5EAEC;
+  --maroon-mid:rgba(107,31,42,0.12);
+  --maroon-border:rgba(107,31,42,0.2);
+  --ink:#1A1614;
+  --ink2:#3D3530;
+  --ink3:#6B6058;
+  --ink4:#9C9089;
+  --r:14px;--rsm:9px;--rlg:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:#E8E4DE;
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:20px;
+}
+.phone{
+  width:393px;height:852px;
+  background:var(--bg);
+  border-radius:50px;overflow:hidden;position:relative;
+  box-shadow:0 40px 100px rgba(26,22,20,0.2),0 0 0 1px rgba(26,22,20,0.08);
+  display:flex;flex-direction:column;
+}
+.status{height:50px;background:var(--bg);display:flex;align-items:center;justify-content:space-between;padding:0 30px;flex-shrink:0;}
+.st{font-weight:600;font-size:15px;color:var(--ink);}
+.sr{font-size:11px;color:var(--ink4);letter-spacing:0.04em;}
+.screen{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.screen.active{display:flex;}
+.scroll{flex:1;overflow-y:auto;padding-bottom:90px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* WORDMARK */
+.topbar{padding:4px 22px 14px;background:var(--bg);flex-shrink:0;}
+.wordmark{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;display:flex;align-items:center;gap:7px;}
+.wmark-accent{width:6px;height:6px;border-radius:50%;background:var(--maroon);flex-shrink:0;}
+.topbar-loc{font-size:11px;color:var(--ink4);margin-top:2px;letter-spacing:0.05em;text-transform:uppercase;}
+
+/* SEARCH BAR */
+.sbar{margin:0 22px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;flex-shrink:0;}
+.sbar:hover{border-color:var(--maroon-border);box-shadow:0 0 0 3px var(--maroon-pale);}
+.sbar svg{color:var(--ink4);flex-shrink:0;}
+.sbar-txt{font-size:13px;color:var(--ink4);}
+
+/* SECTION LABEL */
+.sec{font-size:10px;font-weight:600;color:var(--ink4);letter-spacing:0.12em;text-transform:uppercase;padding:0 22px;margin:6px 0 12px;}
+
+/* AI CARD */
+.aicard{margin:0 22px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;}
+.aicard:hover{border-color:var(--maroon-border);box-shadow:0 4px 20px rgba(107,31,42,0.08);}
+.aicard-photo{width:100%;height:190px;object-fit:cover;display:block;background:var(--bg3);}
+.aicard-body{padding:18px;}
+.ai-eyebrow{font-size:10px;font-weight:600;color:var(--maroon);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:7px;}
+.ai-name{font-family:'Libre Baskerville',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+.ai-why{font-size:12px;color:var(--ink3);line-height:1.6;margin-bottom:14px;}
+.ai-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.ai-compat{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.ai-bar{flex:1;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.ai-fill{height:100%;background:var(--maroon);width:88%;}
+.ai-pct{font-size:11px;font-weight:600;color:var(--maroon);}
+.ai-acts{display:flex;gap:8px;}
+.ai-btn{flex:1;padding:12px 0;border-radius:var(--rsm);border:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all 0.18s;letter-spacing:0.01em;}
+.ai-btn.y{background:var(--maroon);color:#fff;}
+.ai-btn.y:hover{background:var(--maroon-l);}
+.ai-btn.n{background:var(--bg3);color:var(--ink3);border:1px solid var(--border);}
+.ai-btn.n:hover{color:var(--ink2);border-color:var(--border2);}
+
+/* POST CARD */
+.pcard{margin:0 22px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;}
+.pcard:hover{border-color:var(--maroon-border);box-shadow:0 4px 16px rgba(107,31,42,0.06);}
+.pcard-img{width:100%;height:130px;object-fit:cover;display:block;background:var(--bg3);}
+.pcard-body{padding:14px;}
+.pc-top{display:flex;align-items:center;gap:9px;margin-bottom:10px;}
+.pcav{width:32px;height:32px;border-radius:9px;overflow:hidden;flex-shrink:0;background:var(--bg3);}
+.pcav img{width:100%;height:100%;object-fit:cover;}
+.pcmeta{flex:1;}
+.pcname{font-size:13px;font-weight:600;color:var(--ink);}
+.pctime{font-size:11px;color:var(--ink4);margin-top:1px;}
+.ver{display:inline-block;background:var(--maroon-pale);color:var(--maroon);font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;margin-left:5px;border:1px solid var(--maroon-border);letter-spacing:0.03em;}
+.pctitle{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.3;}
+.pctext{font-size:12px;color:var(--ink3);line-height:1.55;margin-bottom:10px;}
+.pctags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.tag{font-size:10px;font-weight:500;padding:3px 8px;border-radius:5px;}
+.tg{background:var(--bg3);color:var(--ink3);border:1px solid var(--border);}
+.tm{background:var(--maroon-pale);color:var(--maroon);border:1px solid var(--maroon-border);}
+.tb{background:#EBF0F5;color:#3A6A8A;border:1px solid #C5D8E8;}
+.pcfoot{display:flex;align-items:center;justify-content:space-between;}
+.pcloc{font-size:11px;color:var(--ink4);}
+
+/* BUTTONS */
+.btn-primary{background:var(--maroon);color:#fff;border:none;border-radius:var(--rsm);padding:8px 16px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.18s;letter-spacing:0.02em;}
+.btn-primary:hover{background:var(--maroon-l);}
+.btn-outline{background:transparent;color:var(--ink3);border:1px solid var(--border);border-radius:var(--rsm);padding:8px 16px;font-family:'Inter',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.18s;}
+.btn-outline:hover{border-color:var(--maroon-border);color:var(--maroon);}
+.btn-full{width:100%;padding:14px;border:none;border-radius:var(--r);font-family:'Libre Baskerville',serif;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.18s;letter-spacing:-0.2px;}
+.btn-full.primary{background:var(--maroon);color:#fff;}
+.btn-full.primary:hover{background:var(--maroon-l);}
+.btn-full.secondary{background:var(--bg3);color:var(--ink3);border:1px solid var(--border);}
+.btn-full.secondary:hover{color:var(--ink2);}
+
+/* BOTTOM NAV */
+.botnav{height:76px;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 4px 8px;flex-shrink:0;}
+.navi{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:8px 14px;border-radius:10px;transition:background 0.15s;color:var(--ink4);font-size:10px;font-weight:500;}
+.navi:hover{background:var(--bg3);}
+.navi.on{color:var(--maroon);}
+.navi svg{width:20px;height:20px;}
+.navplus{width:50px;height:50px;border-radius:16px;background:var(--maroon);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 16px rgba(107,31,42,0.3);transition:all 0.18s;margin-top:-16px;flex-shrink:0;}
+.navplus:hover{background:var(--maroon-l);transform:scale(1.05);}
+
+/* SCREEN HDR */
+.shdr{padding:10px 22px 12px;display:flex;align-items:center;gap:12px;flex-shrink:0;background:var(--bg);border-bottom:1px solid var(--border);}
+.back{width:34px;height:34px;border-radius:9px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.15s;}
+.back:hover{background:var(--bg4);border-color:var(--maroon-border);}
+.stitle{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--ink);}
+.ssub{font-size:11px;color:var(--ink4);margin-top:2px;}
+
+/* FORM */
+.fl{font-size:10px;font-weight:600;color:var(--ink4);letter-spacing:0.08em;text-transform:uppercase;margin:18px 0 8px;padding:0 22px;}
+.fi{width:calc(100% - 44px);margin:0 22px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);outline:none;resize:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.fi:focus{border-color:var(--maroon-border);box-shadow:0 0 0 3px var(--maroon-pale);}
+.fi::placeholder{color:var(--ink4);}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 22px;}
+.chip{padding:7px 13px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);font-size:12px;font-weight:500;color:var(--ink3);cursor:pointer;transition:all 0.15s;}
+.chip:hover{border-color:var(--maroon-border);color:var(--maroon);}
+.chip.on{border-color:var(--maroon);color:var(--maroon);background:var(--maroon-pale);font-weight:600;}
+.frow{display:flex;gap:6px;padding:0 22px;}
+.fchip{flex:1;padding:9px 0;border-radius:8px;border:1px solid var(--border);background:var(--bg2);font-size:12px;font-weight:500;color:var(--ink3);cursor:pointer;text-align:center;transition:all 0.15s;}
+.fchip:hover{border-color:var(--maroon-border);}
+.fchip.on{border-color:var(--maroon);color:var(--maroon);background:var(--maroon-pale);}
+
+/* PHOTO UPLOAD */
+.photo-upload{margin:0 22px;background:var(--bg2);border:1.5px dashed var(--border);border-radius:var(--rsm);padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:border-color 0.2s;min-height:80px;}
+.photo-upload:hover{border-color:var(--maroon-border);}
+.photo-upload-label{font-size:12px;font-weight:500;color:var(--ink4);}
+.photo-upload-sub{font-size:11px;color:var(--border2);}
+.photo-preview{display:none;gap:8px;padding:0 22px;}
+.photo-preview img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--border);}
+
+/* POST CONFIRM */
+.confirm-card{margin:0 22px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.confirm-img{width:100%;height:120px;object-fit:cover;display:block;background:var(--bg3);}
+.confirm-body{padding:14px;}
+.confirm-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.confirm-meta{font-size:12px;color:var(--ink4);}
+
+/* SEARCH */
+.sinpwrap{padding:0 22px 14px;position:relative;flex-shrink:0;}
+.sinp{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:11px 14px 11px 38px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color 0.2s,box-shadow 0.2s;}
+.sinp:focus{border-color:var(--maroon-border);box-shadow:0 0 0 3px var(--maroon-pale);}
+.sinp::placeholder{color:var(--ink4);}
+.sinp-ico{position:absolute;left:36px;top:50%;transform:translateY(-50%);color:var(--ink4);}
+.sdrop{position:absolute;top:calc(100% - 8px);left:22px;right:22px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);overflow:hidden;box-shadow:0 8px 30px rgba(26,22,20,0.1);z-index:50;display:none;}
+.sdrop.show{display:block;}
+.sdrop-item{padding:11px 14px;font-size:13px;color:var(--ink3);cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.1s;display:flex;align-items:center;gap:8px;}
+.sdrop-item:last-child{border-bottom:none;}
+.sdrop-item:hover{background:var(--bg3);}
+.sdot{width:4px;height:4px;border-radius:50%;background:var(--maroon);flex-shrink:0;}
+
+/* EVENT CARD */
+.evcard{margin:0 22px 10px;background:var(--bg2);border:1px solid var(--border);border-left:2px solid var(--maroon);border-radius:var(--r);padding:15px;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;}
+.evcard:hover{box-shadow:0 4px 16px rgba(107,31,42,0.06);}
+.ev-lbl{font-size:10px;font-weight:600;color:var(--maroon);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px;}
+.ev-title{font-family:'Libre Baskerville',serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.ev-meta{font-size:11px;color:var(--ink4);margin-bottom:10px;}
+.ev-foot{display:flex;align-items:center;justify-content:space-between;}
+.ev-going{font-size:11px;color:var(--ink3);font-weight:500;}
+
+/* CHATS */
+.chat-item{display:flex;align-items:center;gap:12px;padding:14px 22px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.15s;}
+.chat-item:hover{background:var(--bg3);}
+.chatav{width:46px;height:46px;border-radius:14px;overflow:hidden;flex-shrink:0;background:var(--bg3);}
+.chatav img{width:100%;height:100%;object-fit:cover;}
+.chat-info{flex:1;min-width:0;}
+.chat-name{font-size:14px;font-weight:600;color:var(--ink);}
+.chat-prev{font-size:12px;color:var(--ink4);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chat-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+.chat-time{font-size:10px;color:var(--ink4);}
+.chat-dot{width:7px;height:7px;border-radius:50%;background:var(--maroon);}
+
+/* DM */
+.dmhdr{padding:10px 22px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg2);}
+.dmav{width:38px;height:38px;border-radius:11px;overflow:hidden;background:var(--bg3);flex-shrink:0;}
+.dmav img{width:100%;height:100%;object-fit:cover;}
+.dmnm{font-size:15px;font-weight:600;color:var(--ink);}
+.dmst{font-size:11px;color:var(--ink4);}
+.msgs{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:8px;background:var(--bg);}
+.msgs::-webkit-scrollbar{display:none;}
+.mwrap{display:flex;flex-direction:column;}
+.mwrap.me{align-items:flex-end;}
+.mwrap.them{align-items:flex-start;}
+.bbl{max-width:78%;padding:10px 14px;font-size:13px;line-height:1.55;}
+.them .bbl{background:var(--bg2);border:1px solid var(--border);border-radius:14px 14px 14px 3px;color:var(--ink);}
+.me .bbl{background:var(--maroon);color:#fff;border-radius:14px 14px 3px 14px;}
+.mt{font-size:10px;color:var(--ink4);margin-top:3px;padding:0 4px;}
+.vtip{background:var(--maroon-pale);border:1px solid var(--maroon-border);border-radius:9px;padding:10px 13px;margin:4px 0;align-self:center;max-width:92%;}
+.vtip-t{font-size:10px;font-weight:600;color:var(--maroon);margin-bottom:3px;letter-spacing:0.04em;text-transform:uppercase;}
+.vtip-b{font-size:11px;color:var(--ink3);line-height:1.45;}
+.dminprow{padding:10px 22px 14px;display:flex;gap:8px;align-items:center;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+.dminp{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:10px 16px;font-family:'Inter',sans-serif;font-size:13px;color:var(--ink);outline:none;}
+.dminp:focus{border-color:var(--maroon-border);}
+.dminp::placeholder{color:var(--ink4);}
+.dmsend{width:38px;height:38px;border-radius:11px;background:var(--maroon);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all 0.18s;}
+.dmsend:hover{background:var(--maroon-l);}
+
+/* POST DETAIL */
+.dscroll{flex:1;overflow-y:auto;}
+.dscroll::-webkit-scrollbar{display:none;}
+.d-img{width:100%;height:200px;object-fit:cover;display:block;background:var(--bg3);}
+.d-user{display:flex;align-items:center;gap:10px;padding:14px 22px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;}
+.d-user:hover{background:var(--bg3);}
+.duav{width:36px;height:36px;border-radius:10px;overflow:hidden;background:var(--bg3);flex-shrink:0;}
+.duav img{width:100%;height:100%;object-fit:cover;}
+.d-title{font-family:'Libre Baskerville',serif;font-size:20px;font-weight:700;color:var(--ink);padding:16px 22px 6px;line-height:1.25;}
+.d-body{font-size:13px;color:var(--ink3);line-height:1.65;padding:0 22px 14px;}
+.d-tags{display:flex;gap:5px;flex-wrap:wrap;padding:0 22px 14px;}
+.d-info{margin:0 22px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:14px;}
+.di{display:flex;justify-content:space-between;padding:5px 0;font-size:12px;border-bottom:1px solid var(--border);}
+.di:last-child{border-bottom:none;}
+.dil{color:var(--ink4);}
+.div_{color:var(--ink);font-weight:600;}
+
+/* PROFILE */
+.profscroll{flex:1;overflow-y:auto;}
+.profscroll::-webkit-scrollbar{display:none;}
+.prof-hero{position:relative;flex-shrink:0;}
+.prof-hero img{width:100%;height:270px;object-fit:cover;display:block;background:var(--bg3);}
+.prof-grad{position:absolute;bottom:0;left:0;right:0;height:130px;background:linear-gradient(transparent,var(--bg));pointer-events:none;}
+.prof-over{position:absolute;bottom:16px;left:22px;right:22px;}
+.prof-nm{font-family:'Libre Baskerville',serif;font-size:26px;font-weight:700;color:#fff;line-height:1.1;text-shadow:0 1px 8px rgba(0,0,0,0.4);}
+.prof-loc{font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px;text-shadow:0 1px 4px rgba(0,0,0,0.3);}
+.prof-bdgs{display:flex;gap:5px;margin-top:8px;}
+.bdg{padding:3px 9px;border-radius:5px;font-size:10px;font-weight:600;}
+.bdg-v{background:rgba(107,31,42,0.85);color:#fff;}
+.bdg-m{background:rgba(255,255,255,0.85);color:var(--ink2);}
+.prof-photos{display:flex;gap:8px;padding:16px 22px;overflow-x:auto;}
+.prof-photos::-webkit-scrollbar{display:none;}
+.prof-ph{width:96px;height:96px;border-radius:12px;flex-shrink:0;overflow:hidden;background:var(--bg3);border:1px solid var(--border);}
+.prof-ph img{width:100%;height:100%;object-fit:cover;}
+.prof-caption{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);margin:0 22px 16px;padding:14px 16px;font-family:'Libre Baskerville',serif;font-size:15px;font-style:italic;color:var(--ink3);line-height:1.6;}
+.prof-ints{padding:0 22px 16px;}
+.prof-il{font-size:10px;font-weight:600;color:var(--ink4);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;}
+.ichips{display:flex;gap:6px;flex-wrap:wrap;}
+.ichip{background:var(--bg3);color:var(--ink3);font-size:12px;font-weight:500;padding:5px 11px;border-radius:7px;border:1px solid var(--border);}
+.prof-meetups{padding:0 22px 16px;}
+.pmeet-item{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;margin-bottom:8px;}
+.pmeet-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.pmeet-note{font-size:11px;color:var(--ink4);}
+.prof-edit-btn{margin:0 22px 8px;width:calc(100% - 44px);padding:12px;background:transparent;color:var(--ink4);border:1px solid var(--border);border-radius:var(--rsm);font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;}
+.prof-edit-btn:hover{color:var(--maroon);border-color:var(--maroon-border);}
+
+/* MATCH */
+.matchwrap{flex:1;overflow-y:auto;padding:20px 22px 30px;}
+.matchwrap::-webkit-scrollbar{display:none;}
+.matchcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rlg);overflow:hidden;margin-bottom:14px;}
+.matchcard img{width:100%;height:220px;object-fit:cover;display:block;background:var(--bg3);}
+.matchbody{padding:18px;}
+.match-eyebrow{font-size:10px;font-weight:600;color:var(--maroon);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;}
+.match-name{font-family:'Libre Baskerville',serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+.match-why{font-size:13px;color:var(--ink3);line-height:1.6;margin-bottom:14px;}
+.match-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.match-compat{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.match-bar{flex:1;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.match-fill{height:100%;background:var(--maroon);width:88%;}
+.match-pct{font-size:11px;font-weight:600;color:var(--maroon);}
+.match-reason{font-size:11px;color:var(--ink4);}
+.match-acts{display:flex;gap:8px;margin-top:16px;}
+.match-acts .ai-btn{flex:1;padding:14px 0;font-size:14px;}
+
+/* TOAST */
+.toast{position:absolute;bottom:88px;left:22px;right:22px;background:var(--ink);color:#fff;border-radius:10px;padding:12px 16px;font-size:13px;font-weight:500;display:none;z-index:200;text-align:center;letter-spacing:0.01em;}
+.toast.show{display:block;}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="status"><span class="st">9:41</span><span class="sr">Capitol Hill · Seattle</span></div>
+
+  <!-- ══ FEED ══ -->
+  <div class="screen active" id="s-feed">
+    <div class="topbar">
+      <div class="wordmark"><div class="wmark-accent"></div>cohort</div>
+      <div class="topbar-loc">Capitol Hill · Seattle</div>
+    </div>
+    <div class="sbar" onclick="go('s-search')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="sbar-txt">search by activity, place, or vibe</span>
+    </div>
+    <div class="scroll">
+      <div class="aicard" onclick="go('s-match')">
+        <img class="aicard-photo" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=200&fit=crop&crop=face" alt="Maya">
+        <div class="aicard-body">
+          <div class="ai-eyebrow">suggested for you</div>
+          <div class="ai-name">Maya, 26</div>
+          <div class="ai-why">Both of you want to catch a rooftop film this weekend. Four meetups, all strong. Quiet energy, works in design.</div>
+          <div class="ai-tags"><span class="tag tm">rooftop film</span><span class="tag tg">weekend</span><span class="tag tg">Capitol Hill</span></div>
+          <div class="ai-compat"><div class="ai-bar"><div class="ai-fill"></div></div><span class="ai-pct">88% compatible</span></div>
+          <div class="ai-acts">
+            <button class="ai-btn y" onclick="event.stopPropagation();openDM('Maya','catching a rooftop film this weekend','s-feed')">say hey</button>
+            <button class="ai-btn n" onclick="event.stopPropagation();dismissAI(this)">not now</button>
+          </div>
+        </div>
+      </div>
+      <div class="sec">near you</div>
+      <div class="pcard" onclick="go('s-detail-ethan')">
+        <img class="pcard-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=140&fit=crop" alt="hiking">
+        <div class="pcard-body">
+          <div class="pc-top">
+            <div class="pcav"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" alt="Ethan"></div>
+            <div class="pcmeta"><div class="pcname">Ethan <span class="ver">verified</span></div><div class="pctime">2 hrs ago · 0.4 mi</div></div>
+          </div>
+          <div class="pctitle">Hiking partner for Rattlesnake Ledge this Sunday</div>
+          <div class="pctext">Intermediate pace. Fine with silence. Starting 7am.</div>
+          <div class="pctags"><span class="tag tb">hiking</span><span class="tag tg">sunday</span><span class="tag tg">outdoor</span></div>
+          <div class="pcfoot"><span class="pcloc">North Bend trailhead</span><button class="btn-primary" onclick="event.stopPropagation();openDM('Ethan','hiking at Rattlesnake Ledge','s-feed')">connect</button></div>
+        </div>
+      </div>
+      <div class="pcard" onclick="go('s-detail-priya')">
+        <img class="pcard-img" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=140&fit=crop" alt="career">
+        <div class="pcard-body">
+          <div class="pc-top">
+            <div class="pcav"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt="Priya"></div>
+            <div class="pcmeta"><div class="pcname">Priya <span class="ver">verified</span></div><div class="pctime">4 hrs ago · 0.8 mi</div></div>
+          </div>
+          <div class="pctitle">Career accountability partner — ambitious only</div>
+          <div class="pctext">Monthly check-ins. Honest feedback. No fluff.</div>
+          <div class="pctags"><span class="tag tm">career</span><span class="tag tg">monthly</span><span class="tag tb">growth</span></div>
+          <div class="pcfoot"><span class="pcloc">Capitol Hill</span><button class="btn-primary" onclick="event.stopPropagation();openDM('Priya','an accountability partnership','s-feed')">connect</button></div>
+        </div>
+      </div>
+      <div class="pcard">
+        <img class="pcard-img" src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=400&h=140&fit=crop" alt="pickleball">
+        <div class="pcard-body">
+          <div class="pc-top">
+            <div class="pcav"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="David"></div>
+            <div class="pcmeta"><div class="pcname">David <span class="ver">verified</span></div><div class="pctime">Just posted · 1.1 mi</div></div>
+          </div>
+          <div class="pctitle">Need a 4th for pickleball Saturday morning</div>
+          <div class="pctext">We have 3, need one more. Casual, 30+. Good attitude about losing helps.</div>
+          <div class="pctags"><span class="tag tg">pickleball</span><span class="tag tg">saturday</span><span class="tag tg">casual</span></div>
+          <div class="pcfoot"><span class="pcloc">Volunteer Park</span><button class="btn-primary" onclick="event.stopPropagation();openDM('David','pickleball on Saturday','s-feed')">connect</button></div>
+        </div>
+      </div>
+      <div class="pcard">
+        <img class="pcard-img" src="https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=400&h=140&fit=crop" alt="chess">
+        <div class="pcard-body">
+          <div class="pc-top">
+            <div class="pcav"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face" alt="Raj"></div>
+            <div class="pcmeta"><div class="pcname">Raj <span class="ver">verified</span></div><div class="pctime">1 hr ago · 0.9 mi</div></div>
+          </div>
+          <div class="pctitle">Chess partner — 1600 to 1800 rated only</div>
+          <div class="pctext">Weekly games in Fremont. Looking for someone who actually challenges me.</div>
+          <div class="pctags"><span class="tag tg">chess</span><span class="tag tg">weekly</span><span class="tag tg">indoor</span></div>
+          <div class="pcfoot"><span class="pcloc">Fremont</span><button class="btn-primary" onclick="event.stopPropagation();openDM('Raj','chess games in Fremont','s-feed')">connect</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="botnav">
+      <div class="navi on" onclick="go('s-feed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>feed</div>
+      <div class="navi" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>search</div>
+      <div class="navplus" onclick="go('s-create')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="navi" onclick="go('s-chats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>chats</div>
+      <div class="navi" onclick="go('s-myprofile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>profile</div>
+    </div>
+  </div>
+
+  <!-- ══ POST DETAIL — ETHAN ══ -->
+  <div class="screen" id="s-detail-ethan">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">post</div></div></div>
+    <div class="dscroll">
+      <img class="d-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=220&fit=crop" alt="hiking">
+      <div class="d-user" onclick="go('s-profile-ethan')">
+        <div class="duav"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" alt="Ethan"></div>
+        <div><div class="pcname">Ethan <span class="ver">verified</span></div><div style="font-size:11px;color:var(--ink4);">7 meetups · tap to view profile</div></div>
+        <svg style="margin-left:auto;color:var(--ink4);" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="d-title">Hiking partner for Rattlesnake Ledge this Sunday</div>
+      <div class="d-body">Intermediate pace, completely fine with silence on the trail. Starting at 7am from North Bend trailhead. Looking for someone who actually wants to be outside. I go most Sundays — if this works well, could become a regular thing.</div>
+      <div class="d-tags"><span class="tag tb">hiking</span><span class="tag tg">sunday</span><span class="tag tg">outdoor</span><span class="tag tb">intermediate</span></div>
+      <div class="d-info">
+        <div class="di"><span class="dil">When</span><span class="div_">Sunday, 7:00am</span></div>
+        <div class="di"><span class="dil">Where</span><span class="div_">North Bend trailhead</span></div>
+        <div class="di"><span class="dil">Ages</span><span class="div_">25–35</span></div>
+        <div class="di"><span class="dil">Open to</span><span class="div_">Everyone</span></div>
+      </div>
+      <div style="padding:0 22px;"><button class="btn-full primary" onclick="openDM('Ethan','hiking at Rattlesnake Ledge','s-detail-ethan')">say hey to Ethan</button></div>
+      <div style="height:24px;"></div>
+    </div>
+  </div>
+
+  <!-- POST DETAIL — PRIYA -->
+  <div class="screen" id="s-detail-priya">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">post</div></div></div>
+    <div class="dscroll">
+      <img class="d-img" src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=220&fit=crop" alt="career">
+      <div class="d-user" onclick="go('s-profile-priya')">
+        <div class="duav"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt="Priya"></div>
+        <div><div class="pcname">Priya <span class="ver">verified</span></div><div style="font-size:11px;color:var(--ink4);">5 meetups · tap to view profile</div></div>
+        <svg style="margin-left:auto;color:var(--ink4);" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="d-title">Career accountability partner — ambitious only</div>
+      <div class="d-body">Monthly check-ins, honest feedback, no performance. I work in investment banking and am building toward a senior role. Looking for someone with equally serious goals. We share progress, call each other out, grow together.</div>
+      <div class="d-tags"><span class="tag tm">career</span><span class="tag tg">monthly</span><span class="tag tb">growth</span></div>
+      <div class="d-info">
+        <div class="di"><span class="dil">Cadence</span><span class="div_">Monthly</span></div>
+        <div class="di"><span class="dil">Where</span><span class="div_">Capitol Hill</span></div>
+        <div class="di"><span class="dil">Ages</span><span class="div_">25–35</span></div>
+        <div class="di"><span class="dil">Open to</span><span class="div_">Everyone</span></div>
+      </div>
+      <div style="padding:0 22px;"><button class="btn-full primary" onclick="openDM('Priya','an accountability partnership','s-detail-priya')">say hey to Priya</button></div>
+      <div style="height:24px;"></div>
+    </div>
+  </div>
+
+  <!-- ══ CREATE ══ -->
+  <div class="screen" id="s-create">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">new post</div><div class="ssub">what are you planning?</div></div></div>
+    <div class="scroll" style="padding-bottom:20px;">
+      <div class="fl">cover photo</div>
+      <div class="photo-upload" id="photo-upload-zone" onclick="fakePhotoUpload()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9C9089" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+        <div class="photo-upload-label">add a cover photo</div>
+        <div class="photo-upload-sub">helps people understand what you're doing</div>
+      </div>
+      <div class="photo-preview" id="photo-preview">
+        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=200&h=120&fit=crop" alt="preview">
+        <div style="font-size:12px;color:var(--ink4);display:flex;align-items:center;">photo added</div>
+      </div>
+      <div class="fl">the activity</div>
+      <div class="chips">
+        <div class="chip on" onclick="toggleChip(this)">hiking</div>
+        <div class="chip" onclick="toggleChip(this)">coffee</div>
+        <div class="chip" onclick="toggleChip(this)">film</div>
+        <div class="chip" onclick="toggleChip(this)">sports</div>
+        <div class="chip" onclick="toggleChip(this)">reading</div>
+        <div class="chip" onclick="toggleChip(this)">food</div>
+        <div class="chip" onclick="toggleChip(this)">creative</div>
+        <div class="chip" onclick="toggleChip(this)">career</div>
+        <div class="chip" id="other-chip" onclick="toggleOther(this)">other</div>
+      </div>
+      <div class="fl" id="other-lbl" style="display:none;">your activity</div>
+      <input class="fi" id="other-inp" style="display:none;" placeholder="type what you want to do...">
+      <div class="fl">describe it</div>
+      <textarea class="fi" rows="3" placeholder="hiking partner for Rattlesnake Ledge this Sunday — intermediate pace, fine with silence"></textarea>
+      <div class="fl">when</div>
+      <input class="fi" type="text" placeholder="Sunday, 7am">
+      <div class="fl">where</div>
+      <input class="fi" type="text" placeholder="North Bend trailhead">
+      <div class="fl">who can see this</div>
+      <div class="frow">
+        <div class="fchip on" onclick="toggleFilter(this)">everyone</div>
+        <div class="fchip" onclick="toggleFilter(this)">women only</div>
+        <div class="fchip" onclick="toggleFilter(this)">men only</div>
+      </div>
+      <div class="fl">age range</div>
+      <div class="frow">
+        <div class="fchip" onclick="toggleFilter(this)">18–25</div>
+        <div class="fchip on" onclick="toggleFilter(this)">25–35</div>
+        <div class="fchip" onclick="toggleFilter(this)">35+</div>
+        <div class="fchip" onclick="toggleFilter(this)">any age</div>
+      </div>
+      <div style="padding:22px 22px 0;"><button class="btn-full primary" onclick="go('s-confirm')">preview post</button></div>
+    </div>
+  </div>
+
+  <!-- ══ POST CONFIRM ══ -->
+  <div class="screen" id="s-confirm">
+    <div class="shdr"><button class="back" onclick="go('s-create')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">looks good?</div><div class="ssub">this is how your post will appear</div></div></div>
+    <div class="scroll" style="padding-bottom:20px;">
+      <div style="height:16px;"></div>
+      <div class="confirm-card">
+        <img class="confirm-img" src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=130&fit=crop" alt="hiking">
+        <div class="confirm-body">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <div class="pcav"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face" alt="you"></div>
+            <div><div class="pcname">Alex <span class="ver">verified</span></div><div class="pctime">Just now · Capitol Hill</div></div>
+          </div>
+          <div class="confirm-title">Hiking partner for Rattlesnake Ledge this Sunday</div>
+          <div class="confirm-meta" style="margin-top:4px;">Sunday 7am · North Bend trailhead · Ages 25–35</div>
+          <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;"><span class="tag tb">hiking</span><span class="tag tg">sunday</span><span class="tag tg">outdoor</span></div>
+        </div>
+      </div>
+      <div style="padding:16px 22px 0;display:flex;flex-direction:column;gap:8px;">
+        <button class="btn-full primary" onclick="doPost()">post to feed</button>
+        <button class="btn-full secondary" onclick="go('s-create')">edit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SEARCH ══ -->
+  <div class="screen" id="s-search">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">search</div></div></div>
+    <div class="sinpwrap">
+      <svg class="sinp-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input class="sinp" id="sinp" placeholder="hiking, chess, coffee, rooftop..." oninput="doSearch(this.value)">
+      <div class="sdrop" id="sdrop"></div>
+    </div>
+    <div class="scroll">
+      <div class="sec" style="margin-top:0;">browse by vibe</div>
+      <div class="chips" style="margin-bottom:16px;">
+        <div class="chip" onclick="toggleChip(this)">outdoor</div>
+        <div class="chip" onclick="toggleChip(this)">social</div>
+        <div class="chip" onclick="toggleChip(this)">career</div>
+        <div class="chip" onclick="toggleChip(this)">creative</div>
+        <div class="chip" onclick="toggleChip(this)">sports</div>
+        <div class="chip" onclick="toggleChip(this)">learning</div>
+      </div>
+      <div class="sec">events near you</div>
+      <div class="evcard" onclick="go('s-detail-ethan')">
+        <div class="ev-lbl">event mode</div>
+        <div class="ev-title">REI Guided Hike — Rattlesnake Ledge</div>
+        <div class="ev-meta">Sunday 8am · North Bend</div>
+        <div class="ev-foot"><span class="ev-going">5 going · 2 need a partner</span><button class="btn-outline" onclick="event.stopPropagation();go('s-detail-ethan')">see who's going</button></div>
+      </div>
+      <div class="evcard">
+        <div class="ev-lbl">event mode</div>
+        <div class="ev-title">SIFF Rooftop Cinema — Cal Anderson</div>
+        <div class="ev-meta">Saturday 8pm · Capitol Hill</div>
+        <div class="ev-foot"><span class="ev-going">8 going · 3 need a partner</span><button class="btn-outline" onclick="event.stopPropagation();go('s-match')">see who's going</button></div>
+      </div>
+      <div class="sec">people posting now</div>
+      <div class="pcard" onclick="go('s-detail-ethan')">
+        <div class="pcard-body" style="padding:14px;">
+          <div class="pc-top">
+            <div class="pcav"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" alt="Ethan"></div>
+            <div class="pcmeta"><div class="pcname">Ethan <span class="ver">verified</span></div><div class="pctime">2 hrs ago · 0.4 mi</div></div>
+          </div>
+          <div class="pctitle">Hiking partner for Rattlesnake Ledge this Sunday</div>
+          <div class="pctags"><span class="tag tb">hiking</span><span class="tag tg">outdoor</span></div>
+          <div class="pcfoot"><span class="pcloc">North Bend</span><button class="btn-primary" onclick="event.stopPropagation();openDM('Ethan','hiking at Rattlesnake Ledge','s-search')">connect</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CHATS ══ -->
+  <div class="screen" id="s-chats">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">chats</div></div></div>
+    <div class="scroll" style="padding-bottom:0;">
+      <div class="chat-item" onclick="go('s-dm-ethan')">
+        <div class="chatav"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" alt="Ethan"></div>
+        <div class="chat-info"><div class="chat-name">Ethan</div><div class="chat-prev">meet at the North Bend parking lot at 7am?</div></div>
+        <div class="chat-right"><span class="chat-time">2:17pm</span><div class="chat-dot"></div></div>
+      </div>
+      <div class="chat-item" onclick="go('s-dm-maya')">
+        <div class="chatav"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=80&h=80&fit=crop&crop=face" alt="Maya"></div>
+        <div class="chat-info"><div class="chat-name">Maya</div><div class="chat-prev">SIFF is doing a Ghibli night I've been waiting for</div></div>
+        <div class="chat-right"><span class="chat-time">yesterday</span></div>
+      </div>
+      <div class="chat-item" onclick="go('s-dm-priya')">
+        <div class="chatav"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt="Priya"></div>
+        <div class="chat-info"><div class="chat-name">Priya</div><div class="chat-prev">let's set a date for next month's check-in</div></div>
+        <div class="chat-right"><span class="chat-time">Mon</span></div>
+      </div>
+    </div>
+    <div class="botnav">
+      <div class="navi" onclick="go('s-feed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>feed</div>
+      <div class="navi" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>search</div>
+      <div class="navplus" onclick="go('s-create')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="navi on" onclick="go('s-chats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>chats</div>
+      <div class="navi" onclick="go('s-myprofile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>profile</div>
+    </div>
+  </div>
+
+  <!-- DM — ETHAN -->
+  <div class="screen" id="s-dm-ethan">
+    <div class="dmhdr"><button class="back" onclick="go('s-chats')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="dmav"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face" alt="Ethan"></div><div><div class="dmnm">Ethan</div><div class="dmst">verified · 7 meetups</div></div></div>
+    <div class="msgs" id="msgs-ethan">
+      <div class="vtip"><div class="vtip-t">first meetup tip</div><div class="vtip-b">Most cohort pairs meet somewhere public first. Reverie Coffee on Capitol Hill — 10% off for cohort users.</div></div>
+      <div class="mwrap them"><div class="bbl">hey, saw your post about rattlesnake ledge sunday — i'm also going solo and could use a trail buddy</div><div class="mt">2:14pm</div></div>
+      <div class="mwrap me"><div class="bbl">yes, intermediate level and totally fine with no talking the whole time</div><div class="mt">2:16pm</div></div>
+      <div class="mwrap them"><div class="bbl">perfect. meet at the North Bend parking lot at 7am? i'll be in a blue jacket</div><div class="mt">2:17pm</div></div>
+    </div>
+    <div class="dminprow"><input class="dminp" id="inp-ethan" placeholder="type a message..."><button class="dmsend" onclick="sendMsg('msgs-ethan','inp-ethan')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button></div>
+  </div>
+
+  <!-- DM — MAYA -->
+  <div class="screen" id="s-dm-maya">
+    <div class="dmhdr"><button class="back" onclick="go('s-chats')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="dmav"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=80&h=80&fit=crop&crop=face" alt="Maya"></div><div><div class="dmnm">Maya</div><div class="dmst">verified · 4 meetups</div></div></div>
+    <div class="msgs" id="msgs-maya">
+      <div class="vtip"><div class="vtip-t">first meetup tip</div><div class="vtip-b">Most cohort pairs meet somewhere public first. Reverie Coffee on Capitol Hill — 10% off for cohort users.</div></div>
+      <div class="mwrap me"><div class="bbl">hi Maya, saw your post about rooftop films this weekend — would love to join if you're still looking for someone</div><div class="mt">now</div></div>
+      <div class="mwrap them"><div class="bbl">yes!! SIFF is doing a Ghibli night I've been waiting for — saturday at 8?</div><div class="mt">just now</div></div>
+    </div>
+    <div class="dminprow"><input class="dminp" id="inp-maya" placeholder="type a message..."><button class="dmsend" onclick="sendMsg('msgs-maya','inp-maya')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button></div>
+  </div>
+
+  <!-- DM — PRIYA -->
+  <div class="screen" id="s-dm-priya">
+    <div class="dmhdr"><button class="back" onclick="go('s-chats')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="dmav"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face" alt="Priya"></div><div><div class="dmnm">Priya</div><div class="dmst">verified · 5 meetups</div></div></div>
+    <div class="msgs" id="msgs-priya">
+      <div class="mwrap them"><div class="bbl">loved our first check-in — your goals are really clear, it helps me sharpen mine too</div><div class="mt">Mon 3pm</div></div>
+      <div class="mwrap me"><div class="bbl">same. that accountability framing you use is something I'm going to steal</div><div class="mt">Mon 3:14pm</div></div>
+      <div class="mwrap them"><div class="bbl">let's set a date for next month's check-in</div><div class="mt">Mon 3:20pm</div></div>
+    </div>
+    <div class="dminprow"><input class="dminp" id="inp-priya" placeholder="type a message..."><button class="dmsend" onclick="sendMsg('msgs-priya','inp-priya')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button></div>
+  </div>
+
+  <!-- DM — NEW -->
+  <div class="screen" id="s-dm-new">
+    <div class="dmhdr"><button class="back" id="new-back"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div class="dmav" id="new-av" style="background:var(--bg3);overflow:hidden;"></div><div><div class="dmnm" id="new-nm">—</div><div class="dmst">verified</div></div></div>
+    <div class="msgs" id="msgs-new">
+      <div class="vtip"><div class="vtip-t">first meetup tip</div><div class="vtip-b">Most cohort pairs meet somewhere public first. Reverie Coffee on Capitol Hill — 10% off for cohort users.</div></div>
+    </div>
+    <div class="dminprow"><input class="dminp" id="inp-new" placeholder="edit and send..."><button class="dmsend" onclick="sendNewMsg()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg></button></div>
+  </div>
+
+  <!-- ══ PROFILE — ETHAN ══ -->
+  <div class="screen" id="s-profile-ethan">
+    <div class="shdr"><button class="back" onclick="go('s-detail-ethan')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">profile</div></div></div>
+    <div class="profscroll">
+      <div class="prof-hero"><img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&h=290&fit=crop" alt="Ethan hiking"><div class="prof-grad"></div><div class="prof-over"><div class="prof-nm">Ethan, 29</div><div class="prof-loc">Capitol Hill · 0.4 mi away</div><div class="prof-bdgs"><span class="bdg bdg-v">verified</span><span class="bdg bdg-m">7 meetups</span></div></div></div>
+      <div class="prof-photos">
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=200&h=200&fit=crop" alt="hiking"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=200&h=200&fit=crop" alt="climbing"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop" alt="coffee"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=200&fit=crop" alt="reading"></div>
+      </div>
+      <div class="prof-caption">"software engineer who hikes to think. intermediate level. prefers silence on the trail. not here for small talk."</div>
+      <div class="prof-ints"><div class="prof-il">into</div><div class="ichips"><span class="ichip">hiking</span><span class="ichip">bouldering</span><span class="ichip">single origin coffee</span><span class="ichip">sci-fi</span><span class="ichip">music</span></div></div>
+      <div class="prof-meetups"><div class="prof-il" style="margin-bottom:10px;">recent meetups</div>
+        <div class="pmeet-item"><div class="pmeet-title">REI Guided Hike — Mt Si</div><div class="pmeet-note">completed · 2 weeks ago</div></div>
+        <div class="pmeet-item"><div class="pmeet-title">Chess session — Fremont</div><div class="pmeet-note">completed · last month</div></div>
+      </div>
+      <div style="padding:0 22px 20px;"><button class="btn-full primary" onclick="openDM('Ethan','hiking at Rattlesnake Ledge','s-profile-ethan')">say hey to Ethan</button></div>
+    </div>
+  </div>
+
+  <!-- PROFILE — PRIYA -->
+  <div class="screen" id="s-profile-priya">
+    <div class="shdr"><button class="back" onclick="go('s-detail-priya')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">profile</div></div></div>
+    <div class="profscroll">
+      <div class="prof-hero"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=290&fit=crop&crop=face" alt="Priya"><div class="prof-grad"></div><div class="prof-over"><div class="prof-nm">Priya, 27</div><div class="prof-loc">Capitol Hill · 0.8 mi away</div><div class="prof-bdgs"><span class="bdg bdg-v">verified</span><span class="bdg bdg-m">5 meetups</span></div></div></div>
+      <div class="prof-photos">
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="work"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop" alt="reading"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=200&h=200&fit=crop" alt="yoga"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=200&h=200&fit=crop" alt="career"></div>
+      </div>
+      <div class="prof-caption">"investment banker building toward something bigger. honest to a fault. looking for peers who take growth as seriously as I do."</div>
+      <div class="prof-ints"><div class="prof-il">into</div><div class="ichips"><span class="ichip">career strategy</span><span class="ichip">reading</span><span class="ichip">running</span><span class="ichip">mindfulness</span><span class="ichip">design thinking</span></div></div>
+      <div class="prof-meetups"><div class="prof-il" style="margin-bottom:10px;">recent meetups</div>
+        <div class="pmeet-item"><div class="pmeet-title">Monthly accountability check-in</div><div class="pmeet-note">completed · 3 weeks ago</div></div>
+      </div>
+      <div style="padding:0 22px 20px;"><button class="btn-full primary" onclick="openDM('Priya','an accountability partnership','s-profile-priya')">say hey to Priya</button></div>
+    </div>
+  </div>
+
+  <!-- ══ MY PROFILE ══ -->
+  <div class="screen" id="s-myprofile">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">your profile</div></div></div>
+    <div class="profscroll">
+      <div class="prof-hero"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=290&fit=crop&crop=face" alt="Alex"><div class="prof-grad"></div><div class="prof-over"><div class="prof-nm">Alex, 27</div><div class="prof-loc">Capitol Hill · Seattle</div><div class="prof-bdgs"><span class="bdg bdg-v">verified</span><span class="bdg bdg-m">3 meetups</span></div></div></div>
+      <div class="prof-photos">
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=200&h=200&fit=crop" alt="swimming"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=200&h=200&fit=crop" alt="pickleball"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop" alt="reading"></div>
+        <div class="prof-ph"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=200&h=200&fit=crop" alt="food"></div>
+      </div>
+      <div class="prof-caption">"new to Seattle. want to swim, play pickleball, find a reading buddy, and occasionally just have someone to catch up with."</div>
+      <div class="prof-ints"><div class="prof-il">into</div><div class="ichips"><span class="ichip">swimming</span><span class="ichip">pickleball</span><span class="ichip">reading</span><span class="ichip">food</span><span class="ichip">travel</span></div></div>
+      <div class="prof-meetups"><div class="prof-il" style="margin-bottom:10px;">your meetups</div>
+        <div class="pmeet-item"><div class="pmeet-title">Pickleball at Volunteer Park</div><div class="pmeet-note">completed · last week</div></div>
+      </div>
+      <button class="prof-edit-btn" onclick="toast('edit profile coming soon')">edit profile</button>
+      <div style="height:8px;"></div>
+    </div>
+    <div class="botnav">
+      <div class="navi" onclick="go('s-feed')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>feed</div>
+      <div class="navi" onclick="go('s-search')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>search</div>
+      <div class="navplus" onclick="go('s-create')"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="navi" onclick="go('s-chats')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>chats</div>
+      <div class="navi on" onclick="go('s-myprofile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>profile</div>
+    </div>
+  </div>
+
+  <!-- ══ MATCH ══ -->
+  <div class="screen" id="s-match">
+    <div class="shdr"><button class="back" onclick="go('s-feed')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B6058" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div><div class="stitle">suggested match</div></div></div>
+    <div class="matchwrap">
+      <div class="matchcard">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=240&fit=crop&crop=face" alt="Maya">
+        <div class="matchbody">
+          <div class="match-eyebrow">suggested for you</div>
+          <div class="match-name">Maya, 26</div>
+          <div class="match-why">Graphic designer, quiet energy, loves indie film and rooftop events. Four meetups. She posted about wanting a film partner this weekend — same as you.</div>
+          <div class="match-tags"><span class="tag tm">rooftop film</span><span class="tag tg">weekend</span><span class="tag tg">Capitol Hill</span><span class="tag tg">quiet energy</span></div>
+          <div class="match-compat"><div class="match-bar"><div class="match-fill"></div></div><span class="match-pct">88% compatible</span></div>
+          <div class="match-reason">matched on: rooftop film · weekend · Capitol Hill · creative</div>
+        </div>
+      </div>
+      <div class="match-acts">
+        <button class="ai-btn y" onclick="openDM('Maya','catching a rooftop film this weekend','s-match')">say hey</button>
+        <button class="ai-btn n" onclick="go('s-feed')">not now</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script>
+const avatars={Maya:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=80&h=80&fit=crop&crop=face',Ethan:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face',Priya:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face',David:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',Raj:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=face'};
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));const el=document.getElementById(id);if(el)el.classList.add('active');}
+function toggleChip(el){el.classList.toggle('on');}
+function toggleOther(el){el.classList.toggle('on');const s=el.classList.contains('on');document.getElementById('other-lbl').style.display=s?'block':'none';document.getElementById('other-inp').style.display=s?'block':'none';}
+function toggleFilter(el){el.parentElement.querySelectorAll('.fchip').forEach(c=>c.classList.remove('on'));el.classList.add('on');}
+function fakePhotoUpload(){document.getElementById('photo-upload-zone').style.display='none';document.getElementById('photo-preview').style.display='flex';}
+function doPost(){toast('your post is live');setTimeout(()=>go('s-feed'),1400);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+function sendMsg(mid,iid){const inp=document.getElementById(iid);const val=inp.value.trim();if(!val)return;const msgs=document.getElementById(mid);const w=document.createElement('div');w.className='mwrap me';w.innerHTML=`<div class="bbl">${val}</div><div class="mt">now</div>`;msgs.appendChild(w);inp.value='';msgs.scrollTop=msgs.scrollHeight;}
+function openDM(name,activity,from){document.getElementById('new-nm').textContent=name;const av=document.getElementById('new-av');const url=avatars[name];av.innerHTML=url?`<img src="${url}" style="width:100%;height:100%;object-fit:cover;" alt="${name}">`:'';document.getElementById('new-back').onclick=()=>go(from);const msgs=document.getElementById('msgs-new');msgs.querySelectorAll('.mwrap').forEach(m=>m.remove());const msg=`hi ${name}, saw your post about ${activity} — would love to connect if you're still looking for someone`;const w=document.createElement('div');w.className='mwrap me';w.innerHTML=`<div class="bbl">${msg}</div><div class="mt">now</div>`;msgs.appendChild(w);document.getElementById('inp-new').value='';go('s-dm-new');msgs.scrollTop=msgs.scrollHeight;}
+function sendNewMsg(){const inp=document.getElementById('inp-new');const val=inp.value.trim();if(!val)return;const msgs=document.getElementById('msgs-new');const w=document.createElement('div');w.className='mwrap me';w.innerHTML=`<div class="bbl">${val}</div><div class="mt">now</div>`;msgs.appendChild(w);inp.value='';msgs.scrollTop=msgs.scrollHeight;}
+function dismissAI(btn){const card=btn.closest('.aicard');card.style.transition='all 0.22s ease';card.style.opacity='0';card.style.transform='translateY(-5px)';setTimeout(()=>card.style.display='none',230);}
+const suggestions=['hiking partner Sunday','hiking Rattlesnake Ledge','chess partner Fremont','coffee Capitol Hill','rooftop movie weekend','pickleball partner','reading buddy','accountability partner','swimming partner','tennis partner'];
+function doSearch(val){const drop=document.getElementById('sdrop');if(!val.trim()){drop.classList.remove('show');return;}const m=suggestions.filter(s=>s.toLowerCase().includes(val.toLowerCase()));if(!m.length){drop.classList.remove('show');return;}drop.innerHTML=m.slice(0,5).map(s=>`<div class="sdrop-item" onclick="pickSearch('${s}')"><div class="sdot"></div>${s}</div>`).join('');drop.classList.add('show');}
+function pickSearch(val){document.getElementById('sinp').value=val;document.getElementById('sdrop').classList.remove('show');}
+document.addEventListener('click',e=>{if(!e.target.closest('.sinpwrap'))document.getElementById('sdrop').classList.remove('show');});
+</script>
+</body>
+</html>
