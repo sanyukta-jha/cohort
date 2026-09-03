@@ -11,7 +11,7 @@ Cohort is a purpose-first activity-matching app that connects people around what
 ## Live Experience
 
 - 🧪 [Interactive Prototype](https://sanyukta-jha.github.io/cohort)
-- 📄 [Full Case Study (PDF)](https://sanyukta-jha.github.io/cohort/cohort_deck_pdf.pdf)
+- 📄 [Full Case Study (PDF)](https://sanyukta-jha.github.io/cohort/Cohort_deck.pdf)
 
 ---
 
